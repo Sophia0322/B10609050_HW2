@@ -24,6 +24,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
@@ -33,12 +34,14 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
 
     private static final int MY_PERMISSION_RECORD_AUDIO_REQUEST_CODE = 88;
     private LinearLayout mMainView;
-
+    // Will display the party size number
+    TextView partySizeTextView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mMainView = (LinearLayout) findViewById(R.id.activity_list);
+
         //defaultSetup();
         setupSharedPreferences();
     }

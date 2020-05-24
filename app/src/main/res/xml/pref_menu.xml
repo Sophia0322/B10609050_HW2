@@ -4,6 +4,7 @@
         android:defaultValue="Red"
         android:entries="@array/pref_color_option_labels"
         android:entryValues="@array/pref_color_option_values"
+        android:summary="@array/pref_color_option_values"
         android:key="color"
         android:title="Shape Color" />
 </PreferenceScreen>

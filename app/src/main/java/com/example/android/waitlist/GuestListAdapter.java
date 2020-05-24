@@ -1,10 +1,12 @@
 package com.example.android.waitlist;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
@@ -20,7 +22,7 @@ import com.example.android.waitlist.data.WaitlistContract;
 import java.util.ResourceBundle;
 
 
-public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.GuestViewHolder> {
+public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.GuestViewHolder> implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     // Holds on to the cursor to display the waitlist
     private Cursor mCursor;
@@ -42,6 +44,7 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.guest_list_item, parent, false);
         return new GuestViewHolder(view);
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -67,13 +70,40 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
 
 
         holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
-        if(partySize>40){
+        /*if(partySize>40){
             holder.partySizeTextView.setBackgroundColor(Color.parseColor("RED"));
         }else{
             holder.partySizeTextView.setBackgroundColor(R.drawable.circle);
         }
+
+         */
     }
 
+
+    // COMPLETED (4) Update setupSharedPreferences and onSharedPreferenceChanged to load the color
+    // from shared preferences. Call setColor, passing in the color you got
+    private void setupSharedPreferences() {
+        // Get all of the values from shared preferences to set it up
+        /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        loadColorFromPreferences(sharedPreferences);
+        // Register the listener
+        sharedPreferences.registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
+
+         */
+    }
+
+    private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
+        /*mMainView.setColor(sharedPreferences.getString(getString(R.string.pref_color_key),
+                getString(R.string.pref_color_red_value)));*/
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        /*if (key.equals(getString(R.string.pref_color_key))) {
+            loadColorFromPreferences(sharedPreferences);
+        }*/
+    }
 
     @Override
     public int getItemCount() {
