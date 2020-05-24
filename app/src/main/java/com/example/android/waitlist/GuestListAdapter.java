@@ -10,14 +10,19 @@ import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.waitlist.data.WaitlistContract;
+
+import org.w3c.dom.Text;
 
 import java.util.ResourceBundle;
 
@@ -67,9 +72,23 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         // COMPLETED (7) Set the tag of the itemview in the holder to the id
         holder.itemView.setTag(id);
 
-
-
         holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
+
+
+
+        /*SharedPreferences getPrefs = PreferenceManager
+                .getDefaultSharedPreferences(getBaseContext());
+        String background_chooser = getPrefs
+                .getString("prefSetBackground", "1");
+        if (background_chooser.equals("1")) {
+            holder.partySizeTextView.setBackgroundColor(Color.RED);
+        } else if (background_chooser.equals("2")) {
+            holder.partySizeTextView.setBackgroundColor(Color.GREEN);
+        } else if (background_chooser.equals("3")) {
+            holder.partySizeTextView.setBackgroundColor(Color.BLUE);
+        } else {
+            holder.partySizeTextView.setBackgroundColor(Color.YELLOW);
+        }
         /*if(partySize>40){
             holder.partySizeTextView.setBackgroundColor(Color.parseColor("RED"));
         }else{
@@ -79,9 +98,20 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
          */
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+   // @Override
+    protected void onCreate(Bundle savedInstanceState) {
+       /* super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        mMainView = (LinearLayout) findViewById(R.id.activity_list);
+
+        //defaultSetup();
+        setupSharedPreferences();*/
+    }
 
     // COMPLETED (4) Update setupSharedPreferences and onSharedPreferenceChanged to load the color
     // from shared preferences. Call setColor, passing in the color you got
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void setupSharedPreferences() {
         // Get all of the values from shared preferences to set it up
         /*SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -93,16 +123,12 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
          */
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
-        /*mMainView.setColor(sharedPreferences.getString(getString(R.string.pref_color_key),
-                getString(R.string.pref_color_red_value)));*/
-    }
 
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        /*if (key.equals(getString(R.string.pref_color_key))) {
-            loadColorFromPreferences(sharedPreferences);
-        }*/
+        /*TextView partySizeTextView = (TextView) itemView.findViewById(R.id.party_size_text_view);
+        mContext.partySizeTextView.setBackgroundColor(sharedPreferences.getString(getString(R.string.pref_color_key),
+                getString(R.string.pref_color_red_value)));*/
     }
 
     @Override
@@ -123,6 +149,16 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         if (newCursor != null) {
             // Force the RecyclerView to refresh
             this.notifyDataSetChanged();
+        }
+    }
+
+    // Updates the screen if the shared preferences change. This method is required when you make a
+    // class implement OnSharedPreferenceChangedListener
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(mContext.getString(R.string.pref_color_key))) {
+            loadColorFromPreferences(sharedPreferences);
         }
     }
 

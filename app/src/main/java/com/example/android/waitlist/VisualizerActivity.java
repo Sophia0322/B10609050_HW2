@@ -18,6 +18,8 @@ package com.example.android.waitlist;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,9 +28,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
 public class VisualizerActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
@@ -36,6 +40,13 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
     private LinearLayout mMainView;
     // Will display the party size number
     TextView partySizeTextView;
+
+    public VisualizerActivity(View itemView) {
+
+        partySizeTextView = (TextView) itemView.findViewById(R.id.party_size_text_view);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +59,7 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
 
     // COMPLETED (4) Update setupSharedPreferences and onSharedPreferenceChanged to load the color
     // from shared preferences. Call setColor, passing in the color you got
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void setupSharedPreferences() {
         // Get all of the values from shared preferences to set it up
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -57,9 +69,12 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
         sharedPreferences.registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
-        /*mMainView.setColor(sharedPreferences.getString(getString(R.string.pref_color_key),
-                getString(R.string.pref_color_red_value)));*/
+        partySizeTextView.setBackground(Drawable.createFromPath(sharedPreferences.getString(getString(R.string.pref_color_key),
+                getString(R.string.pref_color_red_value))));
+        System.out.println(sharedPreferences.getString(getString(R.string.pref_color_key),
+                getString(R.string.pref_color_red_value)));
     }
     /*private void defaultSetup() {
         mMainView.setColor(getString(R.string.pref_color_red_value));
@@ -93,6 +108,7 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
 
     // Updates the screen if the shared preferences change. This method is required when you make a
     // class implement OnSharedPreferenceChangedListener
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(getString(R.string.pref_color_key))) {
