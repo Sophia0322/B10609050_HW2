@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="linearlayout" type="id" />
+    <item name="activitiy_add" type="id" />
+    <item name="activity_settings" type="id" />
+</resources>
