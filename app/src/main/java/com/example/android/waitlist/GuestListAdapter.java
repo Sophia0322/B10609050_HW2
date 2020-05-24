@@ -7,6 +7,8 @@ import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,10 +64,14 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         // COMPLETED (7) Set the tag of the itemview in the holder to the id
         holder.itemView.setTag(id);
 
+
+
         holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
-        //ResourceBundle sharedPreferences = null;
-       // holder.partySizeTextView.setBackground(sharedPreferences.getString(mContext.getString(),
-                getString(R.string.pref_color_red_value)));
+        if(partySize>40){
+            holder.partySizeTextView.setBackgroundColor(Color.parseColor("RED"));
+        }else{
+            holder.partySizeTextView.setBackgroundColor(R.drawable.circle);
+        }
     }
 
 
