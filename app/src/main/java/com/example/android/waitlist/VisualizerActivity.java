@@ -116,4 +116,5 @@ public class VisualizerActivity extends AppCompatActivity implements SharedPrefe
         }
     }
 
+
 }

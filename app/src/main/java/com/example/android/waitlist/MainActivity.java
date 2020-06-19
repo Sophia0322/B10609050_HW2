@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,7 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,8 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.android.waitlist.data.WaitlistContract;
 import com.example.android.waitlist.data.WaitlistDbHelper;
 
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     private GuestListAdapter mAdapter;
     private SQLiteDatabase mDb;
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
         mNewGuestNameEditText = (EditText) this.findViewById(R.id.person_name_edit_text);
         mNewPartySizeEditText = (EditText) this.findViewById(R.id.party_count_edit_text);
 
+        View mpartySizeView = this.findViewById(R.id.party_size_text_view);
+
         // Set layout for the RecyclerView, because it's a list we are using the linear layout
         waitlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -54,8 +62,9 @@ public class MainActivity extends AppCompatActivity {
         // Get all guest info from the database and save in a cursor
         Cursor cursor = getAllGuests();
 
+        final String color = new String();
         // Create an adapter for that cursor to display the data
-        mAdapter = new GuestListAdapter(this, cursor);
+        mAdapter = new GuestListAdapter(this, cursor, color);
 
         // Link the adapter to the RecyclerView
         waitlistRecyclerView.setAdapter(mAdapter);
@@ -194,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    // When the "Add" menu item is pressed, open Main2Activity
+    // When the "Add" menu item is pressed, open Main2Activity; "Settings" menu item is pressed, open SettingsActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -213,4 +222,74 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // COMPLETED (4) Update setupSharedPreferences and onSharedPreferenceChanged to load the color
+    // from shared preferences. Call setColor, passing in the color you got
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void setupSharedPreferences() {
+        // Get all of the values from shared preferences to set it up
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        loadColorFromPreferences(sharedPreferences);
+        // Register the listener
+        sharedPreferences.registerOnSharedPreferenceChangeListener((SharedPreferences.OnSharedPreferenceChangeListener) this);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
+        /*SharedPreferences.Editor editor = getSharedPreferences(String.valueOf(sharedPreferences),
+                MODE_PRIVATE).edit();
+        String color_change = null;
+        editor.putString("color_change", String.valueOf(sharedPreferences));
+
+       */
+
+        /*SharedPreferences sharedPref = getSharedPreferences("colorPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        String color_change = null;
+        editor.putString("color_change", String.valueOf(sharedPreferences));
+        editor.commit();*/
+       // editor.putInt("idName", 12);
+
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(this);
+        String option = pref.getString("pref_color_option_value", "1"); //取顏色的文字&顏色對應的值
+        String[] optionText= getResources().getStringArray(R.array.pref_color_option_labels);
+        //System.out.println(option);
+        //System.out.println(optionText);
+        //return optionText[Integer.parseInt(option)]; //傳回顏色對應的值
+
+        Intent it=new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putString("color",option);
+        it.putExtras(bundle);
+
+
+        //System.out.println(editor);
+        //System.out.println(color_change);
+
+    }
+
+    public interface IMethodCaller {
+        String getColorPreference();
+    }
+
+    public String getColorPreference(){
+        SharedPreferences pref= PreferenceManager.getDefaultSharedPreferences(this);
+        String option = pref.getString("pref_color_option_value", "1"); //取顏色的文字&顏色對應的值
+        String[] optionText= getResources().getStringArray(R.array.pref_color_option_labels);
+        //System.out.println(option);
+        //System.out.println(optionText);
+        //return optionText[Integer.parseInt(option)]; //傳回顏色對應的值
+        System.out.println("hi");
+        return optionText[Integer.parseInt(option)]; //傳回顏色對應的值
+    }
+
+    // Updates the screen if the shared preferences change. This method is required when you make a
+    // class implement OnSharedPreferenceChangedListener
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.pref_color_key))) {
+            loadColorFromPreferences(sharedPreferences);
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package com.example.android.waitlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Build;
@@ -89,6 +90,7 @@ public class SettingsFragment extends PreferenceFragment implements
         super.onCreate(savedInstanceState);
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
+
     }
 
     @Override

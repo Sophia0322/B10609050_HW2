@@ -1,46 +1,44 @@
 package com.example.android.waitlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
-import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.waitlist.data.WaitlistContract;
 
-import org.w3c.dom.Text;
 
-import java.util.ResourceBundle;
+public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.GuestViewHolder> {
 
-
-public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.GuestViewHolder> implements SharedPreferences.OnSharedPreferenceChangeListener{
-
+    public static String color_chooser;
     // Holds on to the cursor to display the waitlist
     private Cursor mCursor;
     private Context mContext;
+    //MainActivity m= new MainActivity();
+    //String color = m.getColorPreference();
+    final String color;
 
     /**
      * Constructor using the context and the db cursor
      * @param context the calling context/activity
      * @param cursor the db cursor with waitlist data to display
+     * @param color
      */
-    public GuestListAdapter(Context context, Cursor cursor) {
+    public GuestListAdapter(Context context, Cursor cursor, String color) {
         this.mContext = context;
         this.mCursor = cursor;
+        this.color = color;
     }
 
     @Override
@@ -48,8 +46,11 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         // Get the RecyclerView item layout
         LayoutInflater inflater = LayoutInflater.from(mContext);
         View view = inflater.inflate(R.layout.guest_list_item, parent, false);
-        return new GuestViewHolder(view);
 
+        SharedPreferences sharedPref = view.getContext().getSharedPreferences("colorPref", Context.MODE_PRIVATE);
+        String color_change=sharedPref.getString("option",null);
+
+        return new GuestViewHolder(view);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -65,6 +66,9 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         // COMPLETED (6) Retrieve the id from the cursor and
         long id = mCursor.getLong(mCursor.getColumnIndex(WaitlistContract.WaitlistEntry._ID));
 
+        Intent intent = ((MainActivity) mContext).getIntent();
+
+
         // Display the guest name
         holder.nameTextView.setText(name);
         // Display the party count
@@ -74,9 +78,69 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
 
         holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
 
+        /*SharedPreferences sharedPref = mContext.getSharedPreferences("colorPref", Context.MODE_PRIVATE);
+        String color_change=sharedPref.getString("color_change",null);
+        System.out.println(color_change);
+        SharedPreferences pref= mContext.getSharedPreferences(MainActivity.this);
+        String option = pref.getString("pref_color_option_value", "1"); //取顏色的文字&顏色對應的值*/
 
 
-        /*SharedPreferences getPrefs = PreferenceManager
+
+        /*
+        switch(color){
+            case "Red":
+                holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_red));
+                break;
+            case "Blue":
+                holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
+                break;
+            case "Green":
+                holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_green));
+                break;
+        }
+*/
+        /*if (partySize>40) {
+            holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_red));
+        }*/
+
+        /*if (mContext instanceof MainActivity) {
+            String colorpref=((MainActivity)mContext).getColorPreference();
+            switch(colorpref){
+                case "Red":
+                    holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_red));
+                    break;
+                case "Blue":
+                    holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
+                    break;
+                case "Green":
+                    holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_green));
+                    break;
+            }
+        }
+*/
+
+        /*
+        if (mContext instanceof MainActivity.IMethodCaller) {
+            String colorpref=((MainActivity.IMethodCaller) mContext).getColorPreference();
+            switch(colorpref){
+                case "Red":
+                    holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_red));
+                    break;
+                case "Blue":
+                    holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle));
+                    break;
+                case "Green":
+                    holder.partySizeTextView.setBackground(ContextCompat.getDrawable(mContext, R.drawable.circle_green));
+                    break;
+            }
+*/
+        }
+
+
+
+
+        /*
+        SharedPreferences getPrefs = PreferenceManager
                 .getDefaultSharedPreferences(getBaseContext());
         String background_chooser = getPrefs
                 .getString("prefSetBackground", "1");
@@ -95,8 +159,9 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
             holder.partySizeTextView.setBackgroundColor(R.drawable.circle);
         }
 
-         */
-    }
+
+    } */
+
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
    // @Override
@@ -123,13 +188,6 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
          */
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void loadColorFromPreferences(SharedPreferences sharedPreferences) {
-
-        /*TextView partySizeTextView = (TextView) itemView.findViewById(R.id.party_size_text_view);
-        mContext.partySizeTextView.setBackgroundColor(sharedPreferences.getString(getString(R.string.pref_color_key),
-                getString(R.string.pref_color_red_value)));*/
-    }
 
     @Override
     public int getItemCount() {
@@ -147,20 +205,12 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestListAdapter.Gues
         if (mCursor != null) mCursor.close();
         mCursor = newCursor;
         if (newCursor != null) {
-            // Force the RecyclerView to refresh
+            // Force the RecyclerView to refresh(重要！！攸關能不能改變顏色)
             this.notifyDataSetChanged();
         }
     }
 
-    // Updates the screen if the shared preferences change. This method is required when you make a
-    // class implement OnSharedPreferenceChangedListener
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(mContext.getString(R.string.pref_color_key))) {
-            loadColorFromPreferences(sharedPreferences);
-        }
-    }
+
 
     /**
      * Inner class to hold the views needed to display a single item in the recycler-view
